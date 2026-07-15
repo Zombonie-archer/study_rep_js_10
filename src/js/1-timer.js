@@ -11,6 +11,11 @@ startButton.addEventListener('click', () => {
   updateTimerDisplay();
 });
 
+const daysElement = document.querySelector('[data-days]');
+const hoursElement = document.querySelector('[data-hours]');
+const minutesElement = document.querySelector('[data-minutes]');
+const secondsElement = document.querySelector('[data-seconds]');
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -76,17 +81,6 @@ function updateTimerDisplay() {
       return;
     }
     const { days, hours, minutes, seconds } = convertMs(timeLeft);
-
-    const daysElement = sessionStorage.getItem('days') || document.querySelector('[data-days]');
-    const hoursElement = sessionStorage.getItem('hours') || document.querySelector('[data-hours]');
-    const minutesElement = sessionStorage.getItem('minutes') || document.querySelector('[data-minutes]');
-    const secondsElement = sessionStorage.getItem('seconds') || document.querySelector('[data-seconds]');
-
-    sessionStorage.setItem('days', daysElement);
-    sessionStorage.setItem('hours', hoursElement);
-    sessionStorage.setItem('minutes', minutesElement);
-    sessionStorage.setItem('seconds', secondsElement);
-
     daysElement.textContent = days
       .toString()
       .padStart(2, '0');
