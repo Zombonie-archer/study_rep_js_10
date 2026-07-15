@@ -6,9 +6,9 @@ function promiseGenerator(delay, state) {
     console.log(`Promise ${state} after ${delay}ms`);
     setTimeout(() => {
       if (state === 'fulfilled') {
-        resolve(state);
+        resolve(delay);
       } else {
-        reject(state);
+        reject(delay);
       }
     }, parseInt(delay));
   });
@@ -32,14 +32,14 @@ formElement.addEventListener('submit', event => {
   const promise = promiseGenerator(delay, state);
   formElement.reset();
   promise
-    .then(state => {
+    .then(delay => {
       iziToast.success({
         title: 'Notification',
         message: `✅ Fulfilled promise in ${delay}ms`,
         timeout: 4000,
       });
     })
-    .catch(state => {
+    .catch(delay => {
       iziToast.error({
         title: 'Notification',
         message: `❌ Rejected promise in ${delay}ms`,

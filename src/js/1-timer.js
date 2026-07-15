@@ -1,7 +1,11 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 let userSelectedDate = null;
 const startButton = document.querySelector('#start-button');
+startButton.disabled = true;
 startButton.addEventListener('click', () => {
   startTimer();
   updateTimerDisplay();
@@ -15,7 +19,11 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] < new Date()) {
       startButton.disabled = true;
-      alert('Please choose a date in the future');
+      iziToast.error({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+        timeout: 4000,
+      });
     } else {
       userSelectedDate = selectedDates[0];
       startButton.disabled = false;
@@ -62,23 +70,33 @@ function updateTimerDisplay() {
     const currentDate = new Date();
     const timeLeft = userSelectedDate - currentDate;
     if (timeLeft <= 0) {
-      startButton.disabled = false;
       datetime.disabled = false;
       userSelectedDate = null;
       timerInterval && clearInterval(timerInterval);
       return;
     }
     const { days, hours, minutes, seconds } = convertMs(timeLeft);
-    document.querySelector('[data-days]').textContent = days
+
+    const daysElement = sessionStorage.getItem('days') || document.querySelector('[data-days]');
+    const hoursElement = sessionStorage.getItem('hours') || document.querySelector('[data-hours]');
+    const minutesElement = sessionStorage.getItem('minutes') || document.querySelector('[data-minutes]');
+    const secondsElement = sessionStorage.getItem('seconds') || document.querySelector('[data-seconds]');
+
+    sessionStorage.setItem('days', daysElement);
+    sessionStorage.setItem('hours', hoursElement);
+    sessionStorage.setItem('minutes', minutesElement);
+    sessionStorage.setItem('seconds', secondsElement);
+
+    daysElement.textContent = days
       .toString()
       .padStart(2, '0');
-    document.querySelector('[data-hours]').textContent = hours
+    hoursElement.textContent = hours
       .toString()
       .padStart(2, '0');
-    document.querySelector('[data-minutes]').textContent = minutes
+    minutesElement.textContent = minutes
       .toString()
       .padStart(2, '0');
-    document.querySelector('[data-seconds]').textContent = seconds
+    secondsElement.textContent = seconds
       .toString()
       .padStart(2, '0');
   }
